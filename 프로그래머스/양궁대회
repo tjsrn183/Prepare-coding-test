@@ -1,0 +1,84 @@
+function makeArr(apich,lion,n,a){
+    let left=n;
+  
+          
+       for(let infoL=a;infoL<apich.length;infoL++){
+        if(apich[infoL]<left){
+            lion[infoL]=apich[infoL]+1;
+            left-=apich[infoL]+1;
+        }
+           if((infoL===apich.length-1)&&(left!==0)){
+              
+               lion[infoL]=left;
+           }
+    }
+    
+    return lion;
+}
+function diff(lion,apich){
+     let lionScore=0;
+    let apichScore=0;
+    const arr =[10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0];
+    const map=new Map();
+    
+    arr.forEach((item,index)=>{
+        map.set(index,item);
+    })
+   
+    for(let a=0;a<lion.length;a++){
+        if(lion[a]<apich[a]){
+            apichScore+=map.get(a)
+        }
+        if(lion[a]>apich[a]){
+           lionScore+=map.get(a)
+        }
+    }
+    //console.log('lion apich',lionScore,apichScore);
+    return [lionScore,apichScore];
+}
+
+function solution(n, info) {
+    var answer = [];
+    const map=new Map();
+  
+ 
+    
+  
+
+    for(let a=0;a<info.length;a++){
+          const immeArr=new Array(info.length).fill(0);
+      makeArr(info,immeArr,n,a);
+        //console.log('immeArr임',immeArr);
+        let [lion,apich]=diff(immeArr,info);
+       if(apich>lion) continue;
+        map.set(immeArr,lion-apich);
+    
+    }
+   const mapToArr=[...map];
+    mapToArr.sort((a,b)=>b[1]-a[1]);
+  
+    
+    if(map.size==0)return [-1];
+    //console.log('맵투어레이 부분참조',mapToArr[0][1]);
+  //  console.log(mapToArr);
+   let max=mapToArr[0][1];
+    let maxArr=mapToArr[0][0];
+    let copyMaxNum=[...maxArr];
+    copyMaxNum.reverse();
+    let copyMaxNum2=copyMaxNum.join('');
+    console.log(maxArr);
+    console.log('카피맥스넘버2',copyMaxNum2);
+    for(let a=1;a<mapToArr.length;a++){
+        if(max===mapToArr[a][1]){
+            const copy= [...mapToArr[a][0]];
+            copy.reverse();
+            let num=copy.join('');
+            console.log('넘버임',num);
+            if(num>copyMaxNum2){maxArr=mapToArr[a][0]; }
+        }
+    }
+  
+  
+    
+    return mapToArr[0][0];
+}
