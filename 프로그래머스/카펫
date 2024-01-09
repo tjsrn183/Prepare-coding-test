@@ -1,0 +1,22 @@
+// 처음에는 완전탐색이라고 문제옆에 메모되어있어서 행렬로 만들어서 완전탐색해야하나 생각을했다.
+// 하지만 조금더 생각해보니 연립방정식으로 풀수도있겠다 싶어서 공식을 세워서 풀어보았다.
+// 여러 알고리즘을 알고나니 처음부터 어떤 알고리즘으로 풀까부터 생각을 했었는데
+// 생각의 순서가 잘못된것 같기도하다. 
+
+
+function solution(brown, yellow) {
+    var answer = [];
+    const first=brown-4;
+    const second=2*yellow;
+    const last=Math.pow(first,2)-8*second;
+    const width=(first+Math.sqrt(last))/4;
+    const height=(first-Math.sqrt(last))/4;
+    const total=brown+yellow;
+    
+    if(Number.isInteger(Math.sqrt(total))){
+        answer=[Math.sqrt(total),Math.sqrt(total)];
+        return answer;
+    }
+    answer=[width+2,height+2];
+    return answer;
+}
