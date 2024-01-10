@@ -1,0 +1,41 @@
+// LRU  알고리즘을 설계하는 문제이다
+// 에러가 났던 이유는
+// 1. cache의 사이즈가 0일때를 고려하지 않았다.
+// 2. cache에 값이 존재할경우 hit를 할것인데 hit를 한 요소를 최신값으로 최신화 시켜주지않았다.
+// 3. 기존에는 hit를 할시 값을 최신화하는 방법이 임시값에 cache의 마지막요소를 담고 hit한 항목의 index와 바꾸어주는 방식이었는데 에러가 떠서 splice 메소드로 해결해줌
+function solution(cacheSize, cities) {
+    var answer = 0;
+    const cache=[];
+    for(let a=0;a<cities.length;a++){
+        if(cacheSize===0){
+            answer+=5;
+            continue;
+        }
+        if(cache.length<cacheSize){
+            if(cache.includes(cities[a].toUpperCase())){
+               answer+=1;
+                let last=cache.length-1;
+            let index=cache.indexOf(cities[a].toUpperCase());
+                cache.splice(index,1);
+                cache.push(cities[a].toUpperCase());
+           
+                continue;
+               }
+            answer+=5;
+            cache.push(cities[a].toUpperCase());
+            continue;
+        }
+        if(cache.includes(cities[a].toUpperCase())){
+            answer+=1;
+            let last=cache.length-1;
+            let index=cache.indexOf(cities[a].toUpperCase());
+            cache.splice(index,1);
+                cache.push(cities[a].toUpperCase());
+        }
+       else{answer+=5;
+            cache.shift();
+            cache.push(cities[a].toUpperCase());}
+        
+    }
+    return answer;
+}
