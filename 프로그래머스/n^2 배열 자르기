@@ -1,0 +1,24 @@
+//처음에는 행렬을 만들어서 그 행렬을 자바스크립트 flat메서드를 통해 평탄화시켜서 요구하는 부분만큼 배열을 잘라내면 될것이다 라고 생각함
+//하지만 그렇게 하여 채점을 돌린결과
+// 실행시간오류 메모리오류로 처음보는 에러가 무수히 떳다
+// 그래서 다시 생각해낸것이
+// 전체 n^2배열을 만들면 안되고 left부터 right까지만 만들어야한다는것이다.
+// 그렇게하여 통과되었다.
+function solution(n, left, right) {
+    var answer = [];
+    let pointer=0;
+    let [startHang,startYeol]=[Math.floor(left/n),left%n];
+    let [endHang,endYeol]=[Math.floor(right/n),right%n];
+
+  while(pointer<(right-left)+1){
+      ++pointer;
+      answer.push(Math.max(startHang+1,startYeol+1));
+      ++startYeol;
+      if(startYeol===n){
+          ++startHang;
+          startYeol=0;
+      }
+      
+  }
+    return answer;
+}
