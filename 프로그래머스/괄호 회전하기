@@ -1,0 +1,40 @@
+//최대한 탑다운방식으로 생각하려고 하였다.
+// 1. 문자열을 회전시키는함수
+// 2. 회전된 문자열이 올바른 괄호인지 판별할 함수
+// 이렇게 함수로 분리하여 조건을 만족할지 answer를 증가시키는 방법으로 코드를짰다
+// 문자열을 다룰때는 메서드도 좋지만 정규표현식을 활용하면 더 간단하게 코드를 작성할수있을듯 싶다.
+function proper(sString){
+    let stringCopy=sString;
+    let count=0;
+    Array.from(stringCopy).forEach(item=>{
+        if(item==='('||item==='{'||item==='['){
+            ++count;
+        }
+    })
+    for(let a=0;a<count;a++){
+       stringCopy = stringCopy.replace(/\[\]|\(\)|\{\}/g, "");
+    }
+
+    return stringCopy?false:true;
+}
+function rotate(item,length){
+  let string=item.substring(1,length);
+  
+    return string.concat(item[0]);
+    
+}
+function solution(s) {
+    var answer = 0;
+    let sCopy=s;
+    for(let a=0;a<s.length;a++){
+        
+        let flag=proper(sCopy);
+         if(flag){++answer;
+                  flag=false;
+                  }
+         sCopy=rotate(sCopy,s.length);
+        
+       
+    }
+    return answer;
+}
