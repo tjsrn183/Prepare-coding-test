@@ -1,0 +1,36 @@
+// 이 문제는 생각보다 쉬운문제였는데 내가 너무 어렵게 생각한 문제이다
+// 기존에는 중첩반복문을 이용했다. 하나는 numbers배열순회, 하나는 for of 문을 이용해 +,-순회
+// 이렇게 코드를 짜니 테스트코드는 통과하였고, 채점에서 두개가 시간초과로 합격을 못하였다.
+// 시간초과가 날때는 웬만하면 반복문을 단순화하거나 반복문 내부에서 조건을 더 세분화 해야한다.
+// 그래서 난 반복문 내부에서 조건을 더 세분화 하였다. 
+// every메서드를 통해서 이전에 탐색한 요소들이 모두 true가 아니면 패스하는방식으로.
+// 그래도 불합격이었다. 
+// 그래서 무조건 반복문을 단순화시켜야했다. 
+// 생각해보면 재귀함수를 쓸거고 조건에 맞다면 return 할것이기때문에 굳이 반복문으로 순회할필요가 없었다.
+
+
+// 오늘 배운 부분은 
+// 난 원래 파라메터로 식을 넣기보단 재귀함수전에 식을써서 그 값을 파라메터로 대입했다.
+//그렇게하면 그 값이 해당 재귀함수에서 유지된다는 특징이 있어 장점이 될수도, 단점이 될수도있었다.
+// 이 문제에선 그렇게하면 단점이 될수도있다는것을 배웠다. 그래서 필요에따라 방법을 선택하면되겠다.
+function dfs(numbers,index,target,resultIndex,result){
+    if(index===numbers.length){
+        if(result===target){
+  resultIndex.push(2);     
+        }
+        return ;
+    }
+dfs(numbers,index+1,target,resultIndex,result+numbers[index]);
+dfs(numbers,index+1,target,resultIndex,result-numbers[index]);
+}
+
+function solution(numbers, target) {
+   
+    let index=0;
+
+    const resultIndex=[];
+    let result=0;
+    
+   dfs(numbers,index,target,resultIndex,result);
+    return resultIndex.length;
+}
