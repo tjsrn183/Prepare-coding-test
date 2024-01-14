@@ -1,0 +1,67 @@
+// 해당문제는 최단거리를 찾는 전형적인 bfs 알고리즘 구현문제이다.
+// 이런문제를 풀때마다 좌우가 계속 헷갈렸다.
+//이번에도 조건을 만족했을시 반복문에서 탈출하는 코드에서 타겟위치의 좌우를 잘못적는 실수를 범했다.
+// 맵에서 최단거리를 찾는문제에서는 좌우를 정확하게아는것이 중요하겠다.
+
+
+class Queue {
+  constructor() {
+   
+    this.items = [];
+  }
+
+  enqueue(item) {
+    this.items.push(item);
+  }
+
+  dequeue() {
+    return this.items.shift();
+  }
+
+  peek() {
+    return this.items[0];
+  }
+
+  getSize() {
+    return this.items.length;
+  }
+
+  isEmpty() {
+    return this.getSize() === 0;
+  }
+}
+
+function solution(maps) {
+    
+    const dx=[0,1,0,-1];
+    const dy=[1,0,-1,0];
+    const width=maps[0].length;
+    const height=maps.length;
+    const visit=Array.from({length:height},()=>Array(width).fill(0));
+    function bfs(){
+        const queue=new Queue();
+        queue.enqueue([0,0]);
+        
+        while(!queue.isEmpty()){   
+            const [x,y]= queue.dequeue();
+            if((x===height-1)&&(y===width-1))return visit[x][y]+1;
+            for(let a=0;a<4;a++){
+             let newX=x+dx[a];
+             let newY=y+dy[a]; 
+              
+                if (newX < 0 || newY < 0 || newX >= height || newY >= width || maps[newX] === undefined || maps[newX][newY] === undefined || maps[newX][newY] === 0) {
+    continue;
+}
+                if(visit[newX][newY]===0){
+                     visit[newX][newY]=visit[x][y]+1;
+                queue.enqueue([newX,newY]);  
+                }
+             
+               
+            }
+             
+        }
+        return -1;
+    }
+    return bfs();
+}
