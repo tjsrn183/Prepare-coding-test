@@ -1,0 +1,33 @@
+// 이번문제로 배운것은 경계값을 잘 확인하자이다
+// 문제자체는 아주 쉬워서 몇분만에 코드를 작성하였지만 합격을 하지못하였다.
+// 그 이유는 난 계속 바로 이전값과 이후값을 비교를하며 결과를 내었는데
+// 그것이 아니라 한덩이 안에서 가장 긴 시간과 그다음 덩어리의 요소를 비교해야하는것이었다.
+
+function solution(progresses, speeds) {
+    var answer = [];
+    let imme=0;
+    let indexOut=0;
+    let max=0;
+   const date= progresses.map((item,index)=>{
+      let nanu= Math.floor((100-item)/speeds[index]);
+      while((nanu*speeds[index]+item)<100){
+         
+          ++nanu;
+         
+      }
+     return nanu;
+    })
+   date.forEach((item,index)=>{
+       answer[indexOut]= ++imme;
+    max=Math.max(max,item);
+       if(max<date[index+1]){
+           max=Math.max(max,date[index+1]);
+           ++indexOut;
+           imme=0;
+       }
+      
+   })
+ 
+  
+    return answer;
+}
