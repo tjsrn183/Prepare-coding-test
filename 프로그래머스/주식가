@@ -1,0 +1,30 @@
+
+
+//////////////////////////기존코드/////////////////////////////
+function solution(prices) {
+    const answer = [];
+    const result = Array(prices.length).fill(0).map((_,idx)=>idx).reverse();
+    const visit=Array(prices.length).fill(false);
+   
+    prices.forEach((item,index)=>{
+        
+        if(item>prices[index+1]){
+           //console.log('index',index);
+            for(let a=0;a<index+1;a++){
+                if(!visit[a]){
+                   
+                  //  console.log('a',a);
+               if(prices[a]>prices[index+1]){
+                   result[a]=index+1-a;
+                    visit[a]=true;
+                  // console.log('실행이 되어야하는데',result);
+               }   
+                }
+            }
+        }
+    })
+    
+  
+   
+    return result;
+}
