@@ -1,26 +1,57 @@
+// 이번 문제를 통해 어떻게하면 효율적으로 코드를 짤 수 있는지 배우게 되었다.
+// 사실 이 문제는 스택문제라고 적혀있었는데 어떻게하면 스택으로 풀 수 있을지 아이디어가 떠오르지 않았다.
+// 그래서 생각나는대로 그림을 그려서 풀었고 "기존코드"라고 적힌대로 풀어서 테스트 케이스와 채점의 정확성 테스트는 합격을 하였다.
+// 하지만 효율성 테스트에서 하나도 합격을 하지못하였다.
+// 아무리 봐도 여기서 더 어떻게 효율적으로 짜야하는지 모르겠어서 다른분의 코드를 보았다.
+// 나는 기존코드에서 중첩반복문을 통해 O(n^2)중에서도 아주 비효율적으로 짜는방법인 무조건 index 0부터 탐색하는 방법을 사용하였다.
+// 하지만 다른분은 타겟값과 가까운부분부터 먼곳을 차례로 탐색하여 조건에 맞을시 반복문을 종료하는 방법을 사용하였다.
+// 나도 그렇게 수정을 하였다.
+// 그리고나서 효율성 테스트의 세번째 검사만 통화를 못하였다.
+// 혹시나해서 해본 생각은
+// 내가 원래는 모든 코드에서 배열을 새롭게 특정 index부분을 탐색하도록 짰는데
+// 상단에 같은 배열의 같은 index를 참조한다면 변수로 초기화해놓고 짜보았더니 통과를 하였다.
 
+
+// 생각보다 배열을 특정 index만 탐색하는것도 시간이 많이 걸린다는것을 깨닳았다.
+// 또한 효율적으로 짜기위해선 최대한 중첩 반복문을 자제하며
+// 꼭 중첩반복문을 사용해야한다면 처음부터 탐색하는것은 더 최대한 자제하도록하자
 
 //////////////////////////기존코드/////////////////////////////
 function solution(prices) {
-    const answer = [];
     const result = Array(prices.length).fill(0).map((_,idx)=>idx).reverse();
     const visit=Array(prices.length).fill(false);
-   
     prices.forEach((item,index)=>{
-        
         if(item>prices[index+1]){
-           //console.log('index',index);
             for(let a=0;a<index+1;a++){
                 if(!visit[a]){
-                   
-                  //  console.log('a',a);
                if(prices[a]>prices[index+1]){
                    result[a]=index+1-a;
                     visit[a]=true;
-                  // console.log('실행이 되어야하는데',result);
                }   
                 }
             }
+        }
+    })
+    return result;
+}
+////////////////////변경코드////////////////////////
+function solution(prices) {
+  
+    const result = Array(prices.length).fill(0).map((_,idx)=>idx).reverse();
+    const visit=Array(prices.length).fill(false);
+    prices.forEach((item,index)=>{
+        const next=prices[index+1];
+        if(item>next){
+            let pre=index;
+            while(prices[pre]>next){
+                if(!visit[pre]){
+               if(prices[pre]>next){
+                   result[pre]=index+1-pre;
+                    visit[pre]=true;
+ }   
+                }
+                --pre;
+   }
         }
     })
     
