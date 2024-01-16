@@ -1,0 +1,45 @@
+//해당문제는 큐를 사용하는 문제이다.
+//난 맞추지못하였고 아래코드는 틀린코드이다
+// 나는 코드를 너무 복잡하게 짜려고하였다
+// 조건을 만족할시 visit에도 넣고 배열요소를 바꾸기도하고 
+// 동등한 깊이의 if문도 여러개이며
+// 이렇게 짤시 나조차도 알아보기 힘든 코드가 되었다.
+// 정답을보니 아이디어 자체는 나와 비슷하였고 
+// 나는 조건에 따라 배열을 건너뛰고 탐색을 시도하였으나 그 조건이 너무 많이 분기되어 알아보기 힘든 코드가 되어 틀렸고
+// 정답은 큐를사용하여 깔끔하게 짰다.
+
+function solution(priorities, location) {
+    var answer = 1;
+    const visit=Array(priorities.length).fill(false);
+    const max=Math.max(...priorities);
+    let index=priorities.indexOf(max);
+    let flag=false;
+    while(!flag){
+      console.log('index1',index);
+        visit[index]=true;
+        priorities[index]=0;
+        if(location===index){ 
+             console.log('index2',index);
+            flag=true;
+            continue;
+        }
+       let immeMax= Math.max(...priorities);
+        let immeIndex=priorities.indexOf(immeMax);
+        if((priorities[(index+1)%priorities.length]===immeMax)&&!visit[index+1]){ 
+            ++index;
+            ++answer;
+            console.log('index3',index);
+            continue;}
+        else{
+            index=immeIndex;
+            ++answer;
+             console.log('index4',index);
+            continue;
+        
+        }
+        ++index;
+        
+    }
+    
+    return answer;
+}
