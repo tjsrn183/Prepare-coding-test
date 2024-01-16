@@ -1,0 +1,63 @@
+// 해당문제는 자카드 유사도를 구하는 문제이다
+// 중복된다고 set으로 합쳐버리는것이 아니라 다른방식으로 구해야한다
+// 나의 알고리즘은
+// 1. 문자열을 두개씩 분리해서 map객체에 키로 넣고 같은 토큰이 나올시 값을 수정한다.
+// 2. 하나의 map객체를 순회하며 나머지 map객체에 있는지 확인하고 있을때와 없을때를 구분하여 반복문을 수행한다.
+// 3. 두개의 맵객체 전부 비어있을시 공집합으로 인식하고 65536을 리턴한다
+// 4. 그렇지 않을시 소수점이하부분은 제외하는 메서드를 사용해서 answer에 담아줍니다.
+
+function solution(str1, str2) {
+    var answer = 0;
+    const str1Map=new Map();
+    const str2Map=new Map();
+    const reg=/^[A-Za-z]+$/;
+    let intersect=0;
+    let union=0;
+    for(let a=0;a<str1.length-1;a++){
+        let token=(str1[a]+str1[a+1]).toLowerCase();
+     
+        if(reg.test(token)){
+            if(str1Map.has(token)){
+                let str1value=str1Map.get(token);
+                str1Map.set(token,++str1value);
+            }
+            else{
+                str1Map.set(token,1);
+            }
+           
+        }
+         
+    }
+   
+     for(let a=0;a<str2.length-1;a++){
+        let token=(str2[a]+str2[a+1]).toLowerCase();
+
+        if(reg.test(token)){
+            if(str2Map.has(token)){
+                let str2value=str2Map.get(token);
+                str2Map.set(token,++str2value);
+            }
+            else{
+                str2Map.set(token,1);
+            }
+           
+        }
+        
+    }
+  
+    for(const [str1K,str1V] of str1Map){
+       if(str2Map.has(str1K)){
+           union+=Math.min(str2Map.get(str1K),str1V);
+           intersect+=Math.max(str2Map.get(str1K),str1V);
+           str2Map.delete(str1K);
+       }
+        else{intersect+=str1V;}
+    }
+    for(const [str2K,str2V] of str2Map){
+        intersect+=str2V;
+    }
+    if(!str1Map.size&&!str2Map.size)return 65536;
+    answer=Math.trunc((union/intersect)*65536);
+ 
+    return answer;
+}
