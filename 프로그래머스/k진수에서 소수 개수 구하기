@@ -1,0 +1,34 @@
+// 이 문제는 소수판별과 정규식을 사용하여서 풀어야하는 문제이다.
+// 카카오는 채팅앱기반이라 그런지 문제가 자연어를 처리하는 문제가 많은듯이 느낀다.
+// 1. 파라메터를 k진수로 변환
+// 2. 앞에 0이 없거나 하나붙어있거나 뒤에도 마찬가지 조건. 그리고 중간에는 1~9사이의수가 존재하는 정규식을 세운다.
+// 3. 0을 앞뒤로 제거하는 코드를 세운다.
+// 4. 그렇게하여 만들어진 배열을 순회하며 소수인지 판별하여 맞다면 answer를 증가시킨다.
+// 해당문제는 소수를 판별할때 제곱근을 사용하지 않으면 반드시 시간초과가 나는 문제였다.
+// 코테에서 소수를 판별할땐 무조건 제곱근을 사용해야한다는것을 배웠다.
+
+function isPrime(num) {
+	if(num === 1) return false; 
+ 	
+ 	for(let i = 2; i <= parseInt(Math.sqrt(num)); i++) {
+  		if(num % i === 0) return false;
+	} 
+    return true; 
+}
+
+
+function solution(n, k) {
+    var answer = 0;
+    const jinsu=n.toString(k);
+    const reg=/0{0,1}[1-9]+0{0,1}/g;
+    const result=jinsu.match(reg);
+ result.forEach(item=>{
+       let token= item.replace(/^0|0$/g, '');
+       if(isPrime(parseInt(token))){
+           ++answer;
+       }
+    });
+ 
+
+    return answer;
+}
