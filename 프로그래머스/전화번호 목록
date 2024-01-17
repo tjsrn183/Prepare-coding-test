@@ -1,0 +1,45 @@
+// 이번 문제는 해시 문제이다.
+// 사실 문제에서 전화번호는 중복이 되지않는다고해서 map부터 쓸생각을 했다.
+// 하지만 map자체에서 순회를할때 자기자신은 빼고 has메서드를 쓰는 방법을 생각해야했고
+// 중첩 반복문을 통해 continue;를 사용해서 해결하였다.
+// 내 코드는 충분히 효율적인 코드로 바꿀수있어 보여서 다른 사람의 코드를 참조하면 제일 아래와 같다.
+// 타인의 코드를 참고해서 배울점은 
+// 1. 고차함수에서 forEach,map,reduce말고도 유용한 함수가 많이 있다
+// 2. startsWith를 왜 생각못했을까
+// 3. sort함수에 비교함수를 주지않고 정렬시키면 문자열의 앞부터 비교해가며 비슷한것끼리 모아서 길이가 짧은순으로 정렬한다.
+
+////////////////나의 코드/////////////////////
+function solution(phone_book) {
+    var answer = true;
+    const itemMap=new Map();
+    const setL=new Set();
+    const lengthArr=[];
+    phone_book.forEach((item,index)=>{
+        setL.add(item.length);
+        itemMap.set(item,false);
+    }
+                      );
+  
+   outer: for(let [key,value] of itemMap){
+        for(let l of setL){
+            if(l >=key.length) continue;
+      let imme=key.slice(0,l);
+            if(itemMap.has(imme)){
+                answer=false;
+                break outer;
+            }
+           
+        }
+     
+    }
+    return answer;
+}
+
+///////////// 베스트 코드////////////////
+function solution(phoneBook) {
+    return !phoneBook.sort().some((t,i)=> {
+        if(i === phoneBook.length -1) return false;
+
+        return phoneBook[i+1].startsWith(phoneBook[i]);        
+    })
+}
