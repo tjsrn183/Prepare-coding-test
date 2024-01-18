@@ -1,0 +1,61 @@
+// 이번문제는 아래코드가 채점결과 80점이 나왔다. 
+// 짜면서도 너무 비효율적이라는 생각을 얼추 했지만 제일 긴 파라메터의 범위가 1000까지라서 이 코드도 얼추 통과할 수 있지않을까라는 생각에 짜보았다.
+// 다행이도 통과를 하였지만 찝찝한 기분이 들었고 다른사람의 코드를 보았더니 역시 원하는 배열을 한번에 만들어놓고 자르는 형식을 사용하였다.
+// 나는 중간에 정말 어이없는 실수를한것이 있었다.
+// p의 변화에 따라 answer배열에 넣는 조건문에서 (index-p+1) % m)===0 이것을 사용해야하는데 (index%m)===p를 사용하였다. 이건 정말 반성해야겠다.
+// 1. 삼중반복문은 파라메터의 범위에 따라 허용될순있지만 웬만하면 쓰지말자
+// 2. *번째를 구할때 식을 생각하며 짜자
+/////////////////////나의 코드////////////////////////
+function solution(n, t, m, p) {
+    var answer = [];
+    let number=0;
+    let index=0;
+   outer: while(answer.length<t){
+       const numArr=Array.from(number.toString(n));
+        if(number.toString().length>=2){
+            for(let item of numArr){
+                const jinbub=Array.from(item.toString(n));
+                for(let itemDeep of jinbub){
+                    if(((index-p+1) % m)===0){
+                        answer.push(itemDeep.toUpperCase());
+                    }
+                    if(answer.length===t) break outer;
+                      ++index;
+                }
+            }
+        }
+        else{
+            for(let item of numArr){
+              
+                if(((index-p+1) % m)===0){
+                    answer.push(item.toUpperCase());
+                }
+                if(answer.length===t) break outer;
+                ++index;
+            }
+        }
+          ++number;
+    }
+    return answer.join('');
+}
+
+//////////////////////다른사람의 코드/////////////////////
+function solution(n, t, m, p) {
+    let saveString = ''
+    let number = 0
+    // 최소한 t*m보다 긴 saveString 생성
+    while(t*m > saveString.length){
+        saveString = saveString.concat(number.toString(n))
+        number++
+    }
+
+    // 필요한 t*m 길이만큼 slice
+    saveString  = saveString.slice(0,t*m)
+
+    // p번째 순서에 대해서만 filter 처리 후 대문자 처리 
+    const answer = saveString.split('').filter((num,idx)=>{
+        return ((idx-p+1) % m )===0
+    }).join('').toUpperCase()
+
+    return answer;
+}
