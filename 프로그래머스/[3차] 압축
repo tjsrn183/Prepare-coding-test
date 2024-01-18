@@ -1,0 +1,37 @@
+// 이 문제는 반복문의 끝값에대한 고찰이 부족해서 조금 고생을 했던문제이다.
+// 결과 answer 배열에 계속 마지막 값이 null로 출력이 되었기 때문이다.
+// 1. 하나의 반복문안에 필요이상의 기능을 집어넣어서 에러가 지속적으로 출력되었다.
+// 2. 웬만하면 변수를 조작한다거나 초기화하는것은 함수상단에서 하거나 최소한 반복문 상단에서 조작을 해야 흐름을 파악하기 쉬울듯싶다.
+이렇게 두가지를 배웠다.
+function solution(msg) {
+    var answer = [];
+    let index=0;
+    
+    const map=new Map();
+    let imme='';
+    for(let a=65;a<91;a++){
+        map.set(String.fromCharCode(a),a%64);
+    }
+   
+  while(index!==msg.length){
+      
+       imme=imme.concat(msg[index]);
+       if(map.has(imme)){
+           ++index;
+           
+ 
+       }
+      else{
+           answer.push(map.get(imme.slice(0,imme.length-1)));
+        map.set(imme,map.size+1);
+           imme = '';
+      }
+       console.log('index',index);
+      if(msg.length===index){
+          console.log('last',imme);
+          answer.push(map.get(imme))
+      }
+
+    }
+    return answer;
+}
