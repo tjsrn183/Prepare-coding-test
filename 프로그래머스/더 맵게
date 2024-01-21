@@ -1,0 +1,106 @@
+// 이 문제는 최소힙을 이용하는 문제이다.
+// 난 최소힙을 이용하기 이전에 반복문 안에서 sort함수를 통해 지속적으로 정렬하고 조건에 맞는지 판단하고 분기하는방식을 사용해보았다
+// 정확성 테스트에서는 항상 통과하였지만 반복적인 sort함수호출로인해 효율성 테스트는 통과하지 못하였다. 
+// 그래서 최소힙을 사용해야겠다는 판단을 하였다.
+// 나머지는 쉽게 구현하였다. 
+// 이문제에서 배운점은 
+// 처음한번 정렬할것이 아니라 반복문 안에서 지속적인 정렬을 해야하며 && 효율성을 검증해야할만큼 데이터의 범위가 크다면
+// 힙을 사용해야한다는것이다.
+class MinHeap {
+  constructor() {
+    this.heap = [];
+  }
+
+  push(value) {
+    this.heap.push(value);
+    this.heapifyUp();
+  }
+
+  pop() {
+    if (this.isEmpty()) return null;
+
+    const root = this.heap[0];
+    const lastNode = this.heap.pop();
+
+    if (!this.isEmpty()) {
+      this.heap[0] = lastNode;
+      this.heapifyDown();
+    }
+
+    return root;
+  }
+
+  isEmpty() {
+    return this.heap.length === 0;
+  }
+
+  heapifyUp() {
+    let index = this.heap.length - 1;
+    while (index > 0) {
+      const parentIndex = Math.floor((index - 1) / 2);
+      if (this.heap[parentIndex] <= this.heap[index]) break;
+      [this.heap[parentIndex], this.heap[index]] = [
+        this.heap[index],
+        this.heap[parentIndex],
+      ];
+      index = parentIndex;
+    }
+  }
+
+  heapifyDown() {
+    let index = 0;
+    const length = this.heap.length;
+
+    while (true) {
+      let smallest = index;
+      const leftChildIndex = 2 * index + 1;
+      const rightChildIndex = 2 * index + 2;
+
+      if (
+        leftChildIndex < length &&
+        this.heap[leftChildIndex] < this.heap[smallest]
+      ) {
+        smallest = leftChildIndex;
+      }
+
+      if (
+        rightChildIndex < length &&
+        this.heap[rightChildIndex] < this.heap[smallest]
+      ) {
+        smallest = rightChildIndex;
+      }
+
+      if (smallest === index) break;
+
+      [this.heap[index], this.heap[smallest]] = [
+        this.heap[smallest],
+        this.heap[index],
+      ];
+      index = smallest;
+    }
+  }
+}
+function solution(scoville, K) {
+    var answer = 0;
+    let flag=false;
+    const heap=new MinHeap();
+    let index=0;
+    scoville.forEach(item=>{
+        heap.push(item);
+    })
+    while(!flag){
+        if(heap.heap.length===1&&heap.heap[0]<K){
+            return -1;
+        }
+      
+        let first=heap.pop(); 
+      
+        if(first>=K) break;
+        ++answer;
+    
+        
+        let second=heap.pop();
+        heap.push(first+(second*2));
+    }
+    return answer;
+}
