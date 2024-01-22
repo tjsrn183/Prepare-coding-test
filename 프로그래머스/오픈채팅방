@@ -1,0 +1,26 @@
+// 이번문제는 오픈채팅방의 닉네임을 항상 최신화 시키는 문제입니다.
+// 저는 닉네임을 항상 최신화시키기위해 
+// Map객체의 키값은 중복되지않는 성질을 사용하여 최신화시켰습니다.
+// 다른사람들도 객체리터럴의 키값의 성질을 사용하여 최신화 시키는것으로 보입니다.
+// 중첩 반복문도 없고 다른코드와 비교해도 비효율적인 부분은 보이지 않습니다.
+function solution(record) {
+    var answer = [];
+    const map=new Map();
+    record.forEach(item=>{
+        const imme=item.split(' ');
+        if((imme[0]==='Enter')||(imme[0]==='Change')){
+               map.set(imme[1],imme[2]);
+        }
+    });
+    record.forEach(item=>{
+        const imme=item.split(' ');
+        let name=map.get(imme[1]);
+        if(imme[0]==='Enter'){
+            answer.push(`${name}님이 들어왔습니다.`);
+        }
+        else if(imme[0]==='Leave'){
+            answer.push(`${name}님이 나갔습니다.`);
+        }
+    })
+    return answer;
+}
