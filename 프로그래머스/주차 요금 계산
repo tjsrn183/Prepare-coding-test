@@ -1,0 +1,82 @@
+// 이번에는 자동차가 입차 혹은 출차를 하며 주차요금을 계산하는 문제입니다.
+// 문제를 풀긴했지만 너무 많은 변수와 반복문과 조건문의 사용으로 타인이 보았을때 이해하기 힘든 코드를 짰습니다.
+// 다른사람의 코드를 보며 몇가지 배울점이 있었습니다.
+// 1. 굳이 parseInt를 쓰지말고 문자타입의 숫자에 *1을 하면 숫자로 되는것을 적극활용하.
+// 2. Map객체를 라이브러리를 통해 쓰는것도 좋지만 객체를 배열로 변환해야하는 상황(정렬)이 있다면 처음부터 {}이렇게 초기화해놓고 쓰자(Map객체를 쓰면 Map을 배열로 변환한다음 정렬해야하기때문)
+// 3. 한번 순회할때 최대한 많은 기능을 넣자
+
+
+//////////나의 코드///////////////
+function recordArr(item){
+     let firstNum=item[1];
+        let timeArr=item[0].split(':');
+ 
+        let minute=(parseInt(timeArr[0])*60)+parseInt(timeArr[1]);
+    return [minute,firstNum,item[2]];
+}
+function solution(fees, records) {
+    var answer = [];
+    const map=new Map();
+    while(records.length){
+        let firstArr=records.shift().split(' ');
+        let [minute,firstNum,inOut]=recordArr(firstArr);
+        let cost=0;
+       if(inOut==='IN'){
+         for(let a=0;a<records.length;a++){
+             let tArr=records[a].split(' ');
+             let [tMinute,tFirstNum,fInOut]=recordArr(tArr);
+            let equal=new RegExp(`${firstNum} OUT$`).test(tArr[1].concat(` ${tArr[2]}`));
+               let cost=map.get(firstNum)||0;
+            if(equal){
+                map.set(firstNum,tMinute-minute+cost);
+                break;
+            }
+             else if((a===records.length-1)&&(!equal)){ 
+                map.set(firstNum,1439-minute+cost);
+           
+             }
+        }
+           if(records.length===0){
+               
+               let cost=map.get(firstNum)||0;
+                  map.set(firstNum,1439-minute+cost);
+             }
+       }
+        
+    }
+    map.forEach((value,key)=>{
+        if(value>fees[0]){
+            let resultCost=fees[1]+(Math.ceil((value-fees[0])/fees[2])*fees[3]);
+            map.set(key,resultCost);
+        }
+        else{
+            map.set(key,fees[1]);
+        }
+    });
+    const mapToArr=Array.from(map);
+    mapToArr.sort((a,b)=>parseInt(a[0])-parseInt(b[0]));
+    
+   answer= mapToArr.map((item)=>item[1]);
+    return answer;
+}
+
+
+///////////////타인의 코드////////////////
+function solution(fees, records) {
+    const parkingTime = {};
+    records.forEach(r => {
+        let [time, id, type] = r.split(' ');
+        let [h, m] = time.split(':');
+        time = (h * 1) * 60 + (m * 1);
+        if (!parkingTime[id]) parkingTime[id] = 0;
+        if (type === 'IN') parkingTime[id] += (1439 - time);
+        if (type === 'OUT') parkingTime[id] -= (1439 - time);
+    });
+    const answer = [];
+    for (let [car, time] of Object.entries(parkingTime)) {
+        if (time <= fees[0]) time = fees[1];
+        else time = Math.ceil((time - fees[0]) / fees[2]) * fees[3] + fees[1]
+        answer.push([car, time]);
+    }
+    return answer.sort((a, b) => a[0] - b[0]).map(v => v[1]);
+}
