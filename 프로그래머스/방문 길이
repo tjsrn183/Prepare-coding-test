@@ -1,0 +1,33 @@
+// 이번문제는 처음가는 길을 걷는 횟수를 count하는 문제이다.
+// 난 당연히 [0,0] => [1,1] 이런 경우를 [0,0,1,1]로 set에 넣어서 중복을 제거하는방법을 사용하였다.
+// 하지만 채점이 거의 틀려서 뭐가 문제일까하다가 [0,0] => [1,1] 이 방법과 [0,0] <= [1,1]이 방법이 같다는것을 착각했다.
+// 그래서 난 두가지다 add하면 중복되는것은 걸러질테니 거기서 나누기 2를하여 return 하는 방법을 사용하였다.
+
+function solution(dirs) {
+    var answer = 0;
+    const now=[0,0];
+    const set=new Set();
+
+    const map={
+        'U':[0,1],
+        'D':[0,-1],
+        'R':[1,0],
+        'L':[-1,0]
+    }
+    for(let a=0;a<dirs.length;a++){
+        const [left,right]=map[dirs[a]];
+        if((Math.abs(now[0]+left)<=5)&&(Math.abs(now[1]+right)<=5)){
+               let newL=now[0]+left;
+        let newR=now[1]+right;
+          
+        set.add(JSON.stringify(now.concat([newL,newR])));
+        set.add(JSON.stringify([newL,newR].concat(now)));
+     
+        now[0]=newL;
+        now[1]=newR;
+     
+        }
+  
+    }
+    return set.size/2;
+}
