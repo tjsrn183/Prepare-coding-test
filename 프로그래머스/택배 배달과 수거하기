@@ -1,0 +1,36 @@
+// 해당문제는 배열의 끝에서부터 해결하는 문제이므로 스택의 원리를 활용하였습니다.
+// 배열의 길이가 0이 아니라면 계속 반복하며
+// distance를 지속적으로 갱신하며 answer에 더해주는 알고리즘을 작성하였습니다.
+
+function solution(cap, n, deliveries, pickups) {
+    let ans = 0;
+    let box = 0;
+    while(deliveries[n-1]===0 && pickups[n-1]===0) {
+        deliveries.pop();
+        pickups.pop();
+        n--;
+    }
+    let distance = n;
+    while(deliveries.length!==0 || pickups.length!==0) { 
+        while(deliveries.length!==0) {
+            box += deliveries.pop();
+            if(box > cap) {
+                deliveries.push(box-cap)
+                break;
+            };
+        }
+        box = 0;
+        while(pickups.length!==0) {
+            box += pickups.pop();
+            if(box > cap) {
+                pickups.push(box-cap)
+                break;
+            };
+        }
+        box = 0;
+        ans += distance;
+        distance = Math.max(deliveries.length, pickups.length);
+    }
+
+    return ans*2;
+}
