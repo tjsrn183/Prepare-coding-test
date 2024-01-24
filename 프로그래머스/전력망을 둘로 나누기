@@ -1,0 +1,45 @@
+// 이번문제는 dfs를 활용한 문제입니다.
+// 알고리즘은 
+// 1. wires배열의 첫번째부터 하나씩 끊어가는 반복문 실행(first,second 두개의 파라메터 전달)
+// 2. dfs의 두번째파라미터 이름은 ban으로 해서 start에서 ban으로 가지않는 경우의 수만 count합니다.
+// 이문제로부터 배운점은 
+// 다른 유형과 다르게 모든 알고리즘을 생각하고 코드를 짜기보단 bfs와 dfs는 문제 전체적인 틀(입력과 출력)을 만들어놓고 그안에서 조율해나가는방법이 빠를듯싶습니다,
+// 그리고 예전에 다른 유형에서 코테에서는 dfs 함수를 solution안에서 선언하는것이 문제풀기 편하다는것을 깨달았습니다.
+// 그래서 그렇게 하였더니 dfs 외부변수를 손쉽게 사용할수있어서 좋았습니다.
+function solution(n, wires) {
+    var answer = -1;
+ 
+    let count=0;
+    let min=wires.length+1;
+    const visit=new Array(9).fill(false);
+    const graph = Array.from({ length: n+1 }, () => []);
+    wires.forEach((item)=>{
+        graph[item[0]].push(item[1]);
+        graph[item[1]].push(item[0]);
+    })
+   function dfs(start,ban){
+        
+        visit[start]=true;
+         ++count;
+     for(let a of graph[start]){
+    
+         if(!visit[a]){
+              if(a!==ban){
+          
+             dfs(a,ban);
+             }
+         }
+     }  
+        return count;
+    }
+    for(let [first,second] of wires){
+          count=0;
+         let one=dfs(first,second);
+        count=0;
+          let two=dfs(second,first);
+        visit.fill(false);
+        min=Math.min(Math.abs(one-two),min);
+    }
+    answer=min;
+    return answer;
+}
