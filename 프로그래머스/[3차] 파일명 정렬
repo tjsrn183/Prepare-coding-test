@@ -1,0 +1,30 @@
+// 카카오는 원래 자연어를 많이 다루는 회사라 그런지 정규식을 활용한 문제가 많은것같다.
+// 문제를 해결하며 느낀점은 문제를 꼼꼼하게 읽어야한다는것이다.
+// 몇가지 에러를 만났는데 해결방법은
+// 기존에는 정규식에 +를 붙였는데 이렇게 되면 tail이 없을경우를 고려하지 못하였다 그래서 난 {0,}으로 해결하였다.
+// 그리고 tail부분에 공백,대소문자,마침표,빼기부호 전부 고려하여 짜야하는데 빼기부호를 생략하고 짯더니 에러가 떳다.
+
+function customSort(a, b) {
+    const headA=a.replace(/[\d]+[\w.\s-]{0,}/,"");
+    const headB=b.replace(/[\d]+[\w.\s-]{0,}/,"");
+    let alphaComparison = headA.localeCompare(headB, undefined, { sensitivity: 'base' });
+  
+    
+    if (alphaComparison === 0) {
+   
+        const realA=Number(a.match(/\d{1,5}/)[0]);
+   
+       const realB=Number(b.match(/\d{1,5}/)[0]);
+  
+        return realA - realB;
+    }
+
+    return alphaComparison;
+}
+
+function solution(files) {
+    var answer = [];
+    files.sort(customSort);
+
+    return files;
+}
