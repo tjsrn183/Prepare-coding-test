@@ -1,0 +1,62 @@
+// 이 문제는 블록게임 문제이다.
+// 이문제는 내가 알고리즘을 짜다가 생각이 너무 꼬여서 어느정도 타인의 코드를 참고하고 푼 문제이다.
+// 난 기존에 스택을 사용하려고 주어진 board배열을 스택을 사용할수있게 변형하였고
+// 조건에 맞는 블록까지 pop하고 나머지빈곳은 다시 *로 채워넣으려고하였다.
+// 하지만 주어진것을 너무 바꿔서 문제와 내생각이 꼬이는 현상이 일어났다.
+// 그래서 주어진것 그대로를 사용하려고하였고 그렇게 만들어진 알고리즘이다.
+// 1. 네모틀을 좌측부터 우측까지 또한 상단부터 하단까지 이동시켜가며 조건을 만족시키는지 본다.
+// 2. 조건에 맞는 블록은 기존의 블록을 복사한 새로운 블록에 같은위치에 요소를 공백으로 만든다
+// 3. 조건에 맞는 블록을 다 공백으로 만든후 두번째 3중반복문에서 각요소를 최하단으로 이동시킨다.
+// 4. 새로운 board를 기존에 board로 복사한다.
+// 5. 조건에 맞는 블록그룹이 없다면 최외곽 while문을 break한다.
+// 중간에 또 겪은 에러는 
+// 중첩배열을 복사하려고할경우 겉배열만 스프레드 문법으로 복사하면 내부의 배열은 기존의 배열을 참조하게되고, 코드를 실행하는동안 같이 바뀌는것을 깜빡한것이다.
+// 중첩배열을 복사하려고하면 겉을 분해시키고 그안에 배열또한 하나씩 복사를 해야한다.
+function solution(m, n, board) {
+    var answer = 0;
+let arr=board.map(item=>{
+      return Array.from(item);
+ })
+let newArr=board.map(item=>{
+      return Array.from(item);
+ })
+
+  
+    while(true){
+        let count=0;
+        for(let height=0;height<m-1;height++){
+            for(let width=0;width<n-1;width++){
+                if(arr[height][width]==='')continue;
+               if(arr[height][width]===arr[height+1][width]&&arr[height][width]===arr[height][width+1]&&arr[height][width]===arr[height+1][width+1]){
+                   newArr[height][width]='';
+                   newArr[height+1][width]='';
+                   newArr[height][width+1]='';
+                   newArr[height+1][width+1]='';
+                   ++count;
+               } 
+            }
+        }
+        
+        for(let height=0;height<m-1;height++){
+            for(let width=0;width<n;width++){
+                if(newArr[height+1][width]===''){
+                    for(let i=height;i>=0;i--){
+                      newArr[i+1][width]=newArr[i][width];
+                    newArr[i][width]='';  
+                    }
+                    
+                }
+            }
+        }
+        arr=newArr.map(item=>[...item]);
+        if(count===0) break;
+    }
+   
+    for(let b=0;b<m;b++){
+        for(let a=0;a<n;a++){
+            if(arr[b][a]==='') ++answer;
+        }
+    }
+    
+    return answer;
+}
