@@ -1,0 +1,44 @@
+// 해당문제는 거의 다 풀렸는듯싶은데 계속 에러가나서 오기로라도 답안을 보지않고 푼 문제이다.
+// 트럭이 다리르 다 지나갈때까지 시간이 얼마나 걸리는지를 구하는 문제이다.
+// 나는 이 문제를 풀며 몇가지 고난을 겪었다.
+// 1. 중첩된 while문안에서 최종조건을 달성했을시 조치를 취하지못해 무한루프가도는 문제가 발생했다.
+// 2. 다음에 다리를 건널 트럭의 무게와 기존 다리위에 무게를 더해서 조건문을 만들어야하는데 기존 다리위에 무게만 고려하여 조건문을 작성하였음
+// 3. 이건 정말 어이없는 실수인데 shift 함수를 사용하면 당연히 요소가 추출된다음 사라지는데 사라지지않는다고 생각하고 코드를 짜버렸다.(너무 오래 고민해서 뇌가 퍼진거같다.)
+// 이러한 문제를 해결하고 문제를 풀었는데 언듯봐도 중복된 코드가 많이 보여서 최적화할방법이 많이 보인다.
+// 무한루프를 돌땐 while문을 주석처리하고 for문으로 대충 자료의 길이만큼 돌려보며 console문을 찍어보는게 최적의 방법인듯하다.
+function solution(bridge_length, weight, truck_weights) {
+    var answer = 0;
+    const inLeg=[];
+    let weightLeg=0;
+   
+ 
+         while(truck_weights.length || inLeg.length){
+        if((inLeg.length)&&(inLeg[0][1]===bridge_length)){
+          weightLeg-=inLeg.shift()[0];
+        }
+        while((truck_weights.length)&&(inLeg.length<bridge_length)&&(weightLeg+truck_weights[0]<=weight)){
+             ++answer;
+            if(truck_weights.length){
+             let truck=truck_weights.shift();
+             inLeg.push([truck,0]);
+                 weightLeg+=truck;
+            }
+            inLeg.forEach(item=>{
+            item[1]+=1;   
+        })
+            if((inLeg.length)&&(inLeg[0][1]===bridge_length)){
+          weightLeg-=inLeg.shift()[0];
+        }
+            continue;
+        }
+       ++answer;
+       inLeg.forEach(item=>{
+            item[1]+=1;   
+        })
+       
+        
+        
+        
+    }
+    return answer;
+}
