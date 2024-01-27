@@ -1,0 +1,42 @@
+
+function solution(numbers) {
+    var answer = [];
+    for(let item of numbers){
+        let itemCopy = BigInt(item);
+        let flag=false;
+      
+        let nextBin='';
+    //    if(typeof itemCopy!=="number") 
+        let itemBin=itemCopy.toString(2);
+       
+  //     
+        //for(let a=0;a<20;a++)
+         while(!flag){
+             let count=0;
+            ++itemCopy;
+           
+           nextBin=itemCopy.toString(2);
+            let length=itemBin.length>nextBin.length?itemBin.length:nextBin.length;
+            let iIndex=itemBin.length-1;
+            let nIndex=nextBin.length-1;
+            for(let a=length-1;a>=0;a--){
+                if(count>=3) break;
+               
+                (itemBin[iIndex]||0)!==(nextBin[nIndex]||0)?++count:count;
+                --iIndex;
+                --nIndex;
+            }
+            if(count<=2) {
+             
+                    flag=true;
+                    answer.push(itemCopy);
+                    break;
+                }
+           
+            
+        }
+       
+    }
+    return answer;
+}
+// 비트계산시 & 나 | 연산자 적극활용
