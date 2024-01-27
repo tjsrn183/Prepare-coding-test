@@ -76,3 +76,37 @@ function solution(numbers) {
     return answer;
 }
 
+ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ세번째 코드 ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
+function solution(numbers) {
+    var answer = [];
+    for(let item of numbers){
+        let itemCopy = BigInt(item);
+         let itemCopy2 = BigInt(item);
+        let flag=false;
+        let nextBin='';
+        let itemBin=itemCopy.toString(2);
+        if(item%2===0){
+            answer.push(item+1);
+            continue;
+         }
+         while(!flag){
+             let count=0;
+            ++itemCopy;
+           
+           nextBin=itemCopy.toString(2);
+         
+               let resultBin=(itemCopy^itemCopy2).toString(2);
+                count=resultBin.match(/1/g).length;
+    
+            if(count<=2) {
+                    flag=true;
+                    answer.push(itemCopy);
+                    break;
+                }
+           
+            
+        }
+
+    }
+    return answer;
+}
