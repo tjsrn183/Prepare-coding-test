@@ -1,0 +1,23 @@
+// 이 문제는 상단에 그리디문제라고 적혀있지만 스택을 잘 활용하는 문제였다.
+// 자바스크립트의 큐와 비슷한 메서드 shift메서드를 사용하면 앞에 요소를 지우고 배열을 재배치하는데에 시간복잡도가 많이 걸릴듯하여
+// 배열을 뒤집어서 pop하는 방식을 사용하였다.
+// 반복문을 다 순회한뒤 k가 남아있으면 stack배열의 뒤부터 자르는식으로 하였다.
+
+function solution(number, k) {
+    let stack = [];
+
+    let arr = number.split('').reverse();
+
+    while(arr.length && k>0){
+        stack.push(arr.pop());
+       
+        while(stack[stack.length-1] < arr[arr.length-1] && k>0) {
+            stack.pop();
+            k = k-1;
+        }
+    }
+
+   if(k !== 0) stack = stack.slice(0, -k);
+
+    return stack.join('') + arr.reverse().join('')
+}
