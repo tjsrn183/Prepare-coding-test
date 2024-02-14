@@ -1,0 +1,55 @@
+// 이문제는 조합을 이용하는 문제이다. 따라서 모든 조합을 고르는 함수가 필요하다
+// 알고리즘은 
+// course 순회=>orders순회=>orders를 이용한 조합을 만들어 키와값을 이루는 객체에 같은 조합의 수를 저장
+// 다시 course를 순회하며 그안에서 키와값을 저장한 객체를 순회하고 당시의 course값과 키의 길이가 같은수 중에서 max값을 구한다.
+// 그리고 다시 키와값 객체를 순회하며 max값과 같은 요소를 필터링하여 answer에 푸시한다
+// 마지막으로 사전순으로 정렬하여 return한다
+
+// 이 문제에서 조합을 구하는 함수를 생각하는것이 너무 힘들었다(사실 이 함수는 다른사람코드를 참고했다.)
+// 조합을 해야한다는건 알면서도 이제까지 조합문제는 전부 일반적인 dfs로 풀어서 생각이 그쪽으로 흘러간것이 생각을 너무 잡아먹었다.
+
+
+function combination(arr, num) {
+  const result = [];
+  if (num === 1) return arr.map((el) => [el]);
+
+  arr.forEach((fix, idx, array) => {
+    const restArray = array.slice(idx + 1);
+    const combiArr = combination(restArray, num - 1);
+    const combiFix = combiArr.map((el) => [fix, ...el]);
+
+    result.push(...combiFix);
+  });
+
+  return result;
+}
+function solution(orders, course) {
+    var answer = [];
+   
+    let obj={};
+    course.forEach((num)=>{
+        orders.forEach((menu)=>{
+            combination(menu.split(""), num).forEach((el) => {
+        const word = el.sort().join("");
+        obj[word] ? (obj[word] += 1) : (obj[word] = 1);
+      });
+        })
+    })
+  course.forEach((num) => {
+    let maxNum = 0;
+    for (const key in obj) {
+      if (obj[key] === 1) continue;
+      if (key.length === num) {
+        obj[key] > maxNum ? (maxNum = obj[key]) : "";
+      }
+    }
+    let temp = Object.keys(obj).filter((key) => {
+      return obj[key] === maxNum && key.length === num;
+    });
+    
+    temp.map((el) => answer.push(el));
+  });
+
+  return answer.sort();
+  
+}
