@@ -1,4 +1,29 @@
-
+// 이 문제는 조건과 일치하는 곡을 찾아서 소팅하는 문제이다.
+// 카카오문제는 문제자체는 어렵지않다?라는 말이 맞는지 모르겠지만 문제를 봤을때 막막하지는 않는데
+// 뭔가 예외를 생각해야할것이 많고 문제가 길어서 읽기가 좀 힘들다
+// 이번에도 문제를 제대로 읽지않아서 힘들었다. 다음부터는 문제를 처음에는 대충한번읽고 다시 한번 더 읽는 습관을 길러야겠다.
+// 나의문제는
+// 1. 정규식을 활용하지않고 계속해서 replaceAll을 돌린것
+// 2. 테스트케이스로 주위진 단서에 패딩을 붙여서 해결할생각보다는 여러 변수를 선언해서 여러 조건문으로 분기해서 해결하려하여 더 복잡하게 만든것
+// 3. sort를 하지않은것(문제를 대충읽음)
+// 종합적으로 문제를 대충읽은것이 문제가 되었다.(요즘들어 왤캐 문제가 잘 읽지않는건지 모르겠다.. 난독증인가)
+///////////////////정답코드///////////////////////
+function solution(m, musicinfos) {
+    m = m.replace(/(C|D|F|G|A)#/g, (_, a) => a.toLowerCase());
+    musicinfos = musicinfos
+        .map((music) => {
+            let [start, end, title, melody] = music.split(',');
+            let h = end.slice(0, 2) - start.slice(0, 2);
+            let m = end.slice(3) - start.slice(3);
+            const time = h * 60 + m;
+            melody = melody.replace(/(C|D|F|G|A)#/g, (_, a) => a.toLowerCase());
+            return [time, title, melody.padEnd(time, melody).slice(0, time)];
+        })
+        .filter(([_, $, melody]) => melody.indexOf(m) >= 0)
+        .sort(([a], [b]) =>{console.log('a 33333b',a,b);return b - a});
+    return musicinfos[0]?.[1] || '(None)';
+}
+////////////////////////////내가쓴코드//////////////////////////////////
 
 function solution(m, musicinfos) {
     var answer = '';
