@@ -1,0 +1,42 @@
+
+
+function solution(m, musicinfos) {
+    var answer = '';
+    let flag=false;
+    m=m.replaceAll('C#',"c").replaceAll('D#','d').replaceAll('F#','f').replaceAll('G#','g').replaceAll('A#','a');
+    
+    outer:for(let a of musicinfos){
+       
+        let index=0;
+        let tokenArr=a.split(',');
+        let music=tokenArr[3].replaceAll('C#',"c").replaceAll('D#','d').replaceAll('F#','f').replaceAll('G#','g').replaceAll('A#','a');
+        let start=tokenArr[0].split(":");
+        let end=tokenArr[1].split(":");
+        let time=(parseInt(end[0])-parseInt(start[0]))*60+Math.abs(parseInt(end[1])-parseInt(start[1]));
+       console.log('tokenArr start end time',tokenArr,start,end,time);
+        for(let b=0;b<time;b++){
+            console.log('music[b%tokenArr.length] m[index]',music[b%music.length],m[index]);
+            if(index===m.length){
+         if(music[b%music.length]!=='#'){
+            console.log('index b music[(b%music.length)]',index,b,music[b%music.length]);
+                flag=true;
+                answer=tokenArr[2];
+                break outer;     
+         }else{index=0;}
+                
+               
+               
+            }
+            else if(music[b%music.length]===m[index]){
+                ++index;
+               
+            }else{
+                index=0;
+            }
+            
+        }
+        console.log('ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ');
+    }
+    if(flag===false)return"(None)";
+    return answer;
+}
