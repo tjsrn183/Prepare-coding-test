@@ -1,0 +1,77 @@
+// 이번문제는 재귀함수를 이용한문제이다
+// 난 재귀함수가 코테의 모든 유형중에서 제일 어렵다.
+// 이 문제는 내가 풀지못하고 푼사람의 풀이를 참고하였다.
+// 내가 어려웠던 부분은
+// 1. 어떻게 u와 v를 분리할것인가
+// 2. 어떻게 "올바른 괄호 문자열"을 구분할것인가
+// 이다. 사실 문제전체를 이해하기가 힘들었다.
+// 이 문제를 푼사람들은 진짜 문제 그대로 코드로 구현하여 풀었다.
+// 재귀함수 유형은 대체로 문제 그대로를 코드로 구현하는 문제가 많은듯하다. 
+// 너무 많은 예외적인 상황을 한번에 생각하기보단 재귀함수문제는 문제를 그대로 코드로 구현해보는 연습을 거치자
+
+const balancedString = (string)=>{
+    const stack = []
+    let leftWrapCount=0,rightWrapCount=0
+    for(let i=0;i<string.length;i++){
+        if(string[i] === '('){
+            stack.push('(')
+            leftWrapCount++
+        }
+        else{
+            stack.push(')')
+            rightWrapCount++
+        }
+
+        if(leftWrapCount === rightWrapCount){
+            break
+        }
+    }
+
+    return [stack.join(''),string.slice(stack.length)]
+}
+
+const isCorrectString = (string)=>{
+    const stack = []
+    for(let i=0;i<string.length;i++){
+        if(stack[stack.length-1]==='(' && string[i] === ')'){
+            stack.pop()
+        }
+        else{
+            stack.push(string[i])
+        }
+    }
+    return stack.length === 0
+}
+
+const process = (string)=>{
+
+    if(string === ''){
+        return ''
+    }
+
+ 
+    const [u,v] = balancedString(string)
+
+  
+    if(isCorrectString(u)){
+
+        const result = u + process(v)
+        return result
+    }
+  
+    else{
+        
+        const convertU = (u)=>{
+            return u.substr(1,u.length-2).split('').map(v=>v===')' ? '(' :')').join('')
+        }
+       
+        const result = '('.concat(process(v)).concat(')') + convertU(u)
+      
+        return result
+    }
+}
+
+function solution(p) {
+    const answer = process(p)
+    return answer
+}
